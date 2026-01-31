@@ -34,3 +34,13 @@ export { BankParser } from './bank/BankParser'
 export type { BankParseResult } from './bank/BankParser'
 export { parseBankLine } from './bank/parseLine'
 export type { ParseLineResult } from './bank/parseLine'
+
+// Prefeitura extractor
+export { PrefeituraExtractor } from './prefeitura/PrefeituraExtractor'
+export type {
+  PrefeituraFormato,
+  PrefeituraExtractionResult,
+} from './prefeitura/PrefeituraExtractor'
+export { extractFromCsvReport } from './prefeitura/extractFromCsvReport'
+export type { CsvReportExtractionResult } from './prefeitura/extractFromCsvReport'
+export { parseBRL } from './prefeitura/parseBRL'
