@@ -91,8 +91,21 @@ function parseStandardFormat(text: string): TextReportResult {
 
     // Tentar extrair matrícula no início da linha
     const matriculaMatch = trimmedLine.match(MATRICULA_REGEX_START)
+    
+    // Se a linha tem CPF mas não tem matrícula no início, não é linha de dados padrão
+    // (pode ser linha de dados do formato colunas separadas)
+    const hasCPF = CPF_REGEX.test(trimmedLine)
+    
     if (!matriculaMatch) {
-      // Tentar em qualquer posição (fallback)
+      // Se não tem matrícula no início, verificar se tem matrícula em qualquer posição
+      // MAS: não aceitar se a "matrícula" está dentro de um CPF
+      if (hasCPF) {
+        // Linha com CPF mas sem matrícula no início = linha de dados do PDF com colunas
+        // Não processar aqui, deixar para parseColumnSeparatedFormat
+        continue
+      }
+      
+      // Tentar em qualquer posição (fallback para linhas sem CPF)
       const anywhereMatch = trimmedLine.match(MATRICULA_REGEX_ANYWHERE)
       if (!anywhereMatch) {
         continue // Não é linha de dados
@@ -230,6 +243,7 @@ function parseColumnSeparatedFormat(text: string): TextReportResult {
       }
     }
   }
+  
 
   // Correlacionar matrículas com dados por ordem
   const minLen = Math.min(allMatriculas.length, allDadosComValor.length)
