@@ -28,3 +28,9 @@ export type {
   PipelineProgress,
   ProgressCallback,
 } from './pipeline/progress'
+
+// Bank parser
+export { BankParser } from './bank/BankParser'
+export type { BankParseResult } from './bank/BankParser'
+export { parseBankLine } from './bank/parseLine'
+export type { ParseLineResult } from './bank/parseLine'
