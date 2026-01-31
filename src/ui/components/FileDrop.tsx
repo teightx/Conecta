@@ -1,5 +1,4 @@
 import { useRef, useState, type DragEvent, type ChangeEvent } from 'react'
-import { tokens } from '../styles/tokens'
 import { Button } from './Button'
 
 interface FileDropProps {
@@ -12,14 +11,13 @@ interface FileDropProps {
 
 /**
  * Dropzone para seleção de arquivo
- * Com drag & drop, preview do arquivo selecionado e validação
+ * Suporta light/dark mode via CSS classes
  */
 export function FileDrop({ label, hint, accept, file, onFile }: FileDropProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  // Extensões aceitas
   const acceptedExtensions = accept
     .split(',')
     .map((ext) => ext.trim().toLowerCase().replace('*', ''))
@@ -59,7 +57,6 @@ export function FileDrop({ label, hint, accept, file, onFile }: FileDropProps) {
     if (selectedFile && validateFile(selectedFile)) {
       onFile(selectedFile)
     }
-    // Reset input para permitir selecionar o mesmo arquivo novamente
     e.target.value = ''
   }
 
@@ -78,44 +75,18 @@ export function FileDrop({ label, hint, accept, file, onFile }: FileDropProps) {
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
   }
 
-  return (
-    <div style={{ width: '100%' }}>
-      {/* Label */}
-      <div
-        style={{
-          marginBottom: tokens.spacing.sm,
-          fontSize: tokens.typography.fontSize.sm,
-          fontWeight: tokens.typography.fontWeight.medium,
-          color: tokens.colors.textPrimary,
-        }}
-      >
-        {label}
-      </div>
+  const dropzoneClass = `filedrop-zone ${isDragging ? 'dragging' : ''} ${error ? 'error' : ''} ${file ? 'has-file' : ''}`
 
-      {/* Dropzone */}
+  return (
+    <div className="filedrop">
+      <div className="filedrop-label">{label}</div>
+
       <div
+        className={dropzoneClass}
         onClick={file ? undefined : handleClick}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
-        style={{
-          position: 'relative',
-          padding: file ? tokens.spacing.base : tokens.spacing.xl,
-          borderRadius: tokens.radius.md,
-          border: `2px dashed ${
-            error
-              ? tokens.colors.error
-              : isDragging
-              ? tokens.colors.dropzoneActiveBorder
-              : tokens.colors.dropzoneBorder
-          }`,
-          backgroundColor: isDragging
-            ? tokens.colors.dropzoneActive
-            : tokens.colors.dropzoneBg,
-          cursor: file ? 'default' : 'pointer',
-          transition: `all ${tokens.transitions.normal}`,
-          textAlign: 'center',
-        }}
       >
         <input
           ref={inputRef}
@@ -126,45 +97,12 @@ export function FileDrop({ label, hint, accept, file, onFile }: FileDropProps) {
         />
 
         {file ? (
-          // Arquivo selecionado
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: tokens.spacing.base,
-            }}
-          >
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: tokens.spacing.md,
-                minWidth: 0,
-              }}
-            >
+          <div className="filedrop-file">
+            <div className="filedrop-file-info">
               <FileIcon />
-              <div style={{ textAlign: 'left', minWidth: 0 }}>
-                <div
-                  style={{
-                    fontSize: tokens.typography.fontSize.sm,
-                    fontWeight: tokens.typography.fontWeight.medium,
-                    color: tokens.colors.textPrimary,
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                  }}
-                >
-                  {file.name}
-                </div>
-                <div
-                  style={{
-                    fontSize: tokens.typography.fontSize.xs,
-                    color: tokens.colors.textMuted,
-                  }}
-                >
-                  {formatFileSize(file.size)}
-                </div>
+              <div className="filedrop-file-details">
+                <span className="filedrop-file-name">{file.name}</span>
+                <span className="filedrop-file-size">{formatFileSize(file.size)}</span>
               </div>
             </div>
             <Button variant="ghost" onClick={handleClear}>
@@ -172,48 +110,19 @@ export function FileDrop({ label, hint, accept, file, onFile }: FileDropProps) {
             </Button>
           </div>
         ) : (
-          // Estado vazio
           <>
             <UploadIcon />
-            <div
-              style={{
-                marginTop: tokens.spacing.md,
-                fontSize: tokens.typography.fontSize.sm,
-                color: tokens.colors.textSecondary,
-              }}
-            >
-              <span style={{ fontWeight: tokens.typography.fontWeight.medium }}>
-                Clique para selecionar
-              </span>{' '}
-              ou arraste o arquivo
+            <div className="filedrop-text">
+              <strong>Clique para selecionar</strong> ou arraste o arquivo
             </div>
-            {hint && (
-              <div
-                style={{
-                  marginTop: tokens.spacing.xs,
-                  fontSize: tokens.typography.fontSize.xs,
-                  color: tokens.colors.textMuted,
-                }}
-              >
-                {hint}
-              </div>
-            )}
+            {hint && <div className="filedrop-hint">{hint}</div>}
           </>
         )}
       </div>
 
-      {/* Mensagem de erro */}
-      {error && (
-        <div
-          style={{
-            marginTop: tokens.spacing.sm,
-            fontSize: tokens.typography.fontSize.xs,
-            color: tokens.colors.error,
-          }}
-        >
-          {error}
-        </div>
-      )}
+      {error && <div className="filedrop-error">{error}</div>}
+
+      <style>{fileDropCSS}</style>
     </div>
   )
 }
@@ -229,7 +138,7 @@ function UploadIcon() {
       height="40"
       viewBox="0 0 24 24"
       fill="none"
-      stroke={tokens.colors.textMuted}
+      stroke="var(--cc-text-muted)"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -249,7 +158,7 @@ function FileIcon() {
       height="32"
       viewBox="0 0 24 24"
       fill="none"
-      stroke={tokens.colors.primary}
+      stroke="var(--cc-primary)"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -262,3 +171,108 @@ function FileIcon() {
     </svg>
   )
 }
+
+// ─────────────────────────────────────────────────────────────
+// CSS
+// ─────────────────────────────────────────────────────────────
+
+const fileDropCSS = `
+  .filedrop {
+    width: 100%;
+  }
+
+  .filedrop-label {
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--cc-text);
+  }
+
+  .filedrop-zone {
+    position: relative;
+    padding: 32px;
+    border-radius: var(--cc-radius-md);
+    border: 2px dashed var(--cc-border-strong);
+    background: var(--cc-surface-2);
+    cursor: pointer;
+    transition: all 200ms ease;
+    text-align: center;
+  }
+
+  .filedrop-zone:hover {
+    border-color: var(--cc-primary);
+    background: var(--cc-primary-light);
+  }
+
+  .filedrop-zone.dragging {
+    border-color: var(--cc-primary);
+    background: var(--cc-primary-light);
+  }
+
+  .filedrop-zone.error {
+    border-color: var(--cc-danger);
+    background: var(--cc-danger-light);
+  }
+
+  .filedrop-zone.has-file {
+    padding: 14px;
+    cursor: default;
+  }
+
+  .filedrop-text {
+    margin-top: 12px;
+    font-size: 14px;
+    color: var(--cc-text-secondary);
+  }
+
+  .filedrop-text strong {
+    font-weight: 500;
+    color: var(--cc-primary);
+  }
+
+  .filedrop-hint {
+    margin-top: 6px;
+    font-size: 12px;
+    color: var(--cc-text-muted);
+  }
+
+  .filedrop-file {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .filedrop-file-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .filedrop-file-details {
+    text-align: left;
+    min-width: 0;
+  }
+
+  .filedrop-file-name {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--cc-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .filedrop-file-size {
+    font-size: 12px;
+    color: var(--cc-text-muted);
+  }
+
+  .filedrop-error {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--cc-danger);
+  }
+`

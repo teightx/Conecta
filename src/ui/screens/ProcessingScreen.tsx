@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { tokens } from '../styles/tokens'
 import { Card } from '../components/Card'
 import { Button } from '../components/Button'
 import { ProgressBar } from '../components/ProgressBar'
 import { StepList, type StepItem } from '../components/StepList'
 import { InlineBanner } from '../components/InlineBanner'
+import { Illustration } from '../components/Illustration'
 
 // ─────────────────────────────────────────────────────────────
 // TIPOS
@@ -135,7 +135,7 @@ export function ProcessingScreen({
 
           {/* Ilustração */}
           <div className="processing-illustration">
-            <ProcessingIllustration />
+            <Illustration name="processing" size="md" />
           </div>
         </aside>
       </div>
@@ -187,7 +187,7 @@ function BulletIcon() {
         display: 'inline-block',
         width: '6px',
         height: '6px',
-        backgroundColor: tokens.colors.primary,
+        backgroundColor: 'var(--cc-primary)',
         borderRadius: '50%',
         marginRight: '10px',
         flexShrink: 0,
@@ -217,87 +217,6 @@ function ChevronIcon({ open }: { open: boolean }) {
   )
 }
 
-function ProcessingIllustration() {
-  return (
-    <svg
-      width="200"
-      height="140"
-      viewBox="0 0 200 140"
-      fill="none"
-      style={{ opacity: 0.75, maxWidth: '100%', height: 'auto' }}
-    >
-      {/* Clipboard */}
-      <rect
-        x="60"
-        y="20"
-        width="80"
-        height="100"
-        rx="6"
-        fill="#e8ecf2"
-        stroke="#c8cfd8"
-        strokeWidth="1"
-      />
-      {/* Clip */}
-      <rect x="85" y="12" width="30" height="16" rx="3" fill="#c8cfd8" />
-      <rect x="90" y="16" width="20" height="8" rx="2" fill="#b8c0cc" />
-
-      {/* Lines */}
-      <rect x="72" y="40" width="56" height="4" rx="2" fill="#b8c0cc" />
-      <rect x="72" y="52" width="48" height="4" rx="2" fill="#b8c0cc" />
-      <rect x="72" y="64" width="52" height="4" rx="2" fill="#b8c0cc" />
-      <rect x="72" y="76" width="40" height="4" rx="2" fill="#b8c0cc" />
-
-      {/* Checkmarks */}
-      <circle cx="72" y="92" r="8" fill="rgba(52, 199, 89, 0.15)" />
-      <path
-        d="M68 92 L71 95 L77 89"
-        stroke={tokens.colors.success}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-
-      <circle cx="92" cy="92" r="8" fill="rgba(52, 199, 89, 0.15)" />
-      <path
-        d="M88 92 L91 95 L97 89"
-        stroke={tokens.colors.success}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-
-      {/* Spinner */}
-      <circle
-        cx="112"
-        cy="92"
-        r="7"
-        stroke={tokens.colors.primary}
-        strokeOpacity="0.2"
-        strokeWidth="2"
-        fill="none"
-      />
-      <path
-        d="M112 85 a7 7 0 0 1 7 7"
-        stroke={tokens.colors.primary}
-        strokeWidth="2"
-        strokeLinecap="round"
-        fill="none"
-      >
-        <animateTransform
-          attributeName="transform"
-          type="rotate"
-          from="0 112 92"
-          to="360 112 92"
-          dur="1s"
-          repeatCount="indefinite"
-        />
-      </path>
-    </svg>
-  )
-}
-
 // ─────────────────────────────────────────────────────────────
 // CSS
 // ─────────────────────────────────────────────────────────────
@@ -308,85 +227,93 @@ const processingCSS = `
   }
 
   .processing-header {
-    margin-bottom: ${tokens.spacing.xl};
+    margin-bottom: 32px;
+    text-align: center;
   }
 
   .processing-title {
-    font-size: 1.875rem;
-    font-weight: ${tokens.typography.fontWeight.bold};
-    color: ${tokens.colors.textPrimary};
-    letter-spacing: ${tokens.typography.letterSpacing.tight};
-    margin-bottom: ${tokens.spacing.xs};
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--cc-text);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
   }
 
   .processing-subtitle {
-    font-size: ${tokens.typography.fontSize.md};
-    color: ${tokens.colors.textSecondary};
-    margin-bottom: ${tokens.spacing.sm};
+    font-size: 15px;
+    color: var(--cc-text-secondary);
+    margin-bottom: 6px;
   }
 
   .processing-note {
-    font-size: ${tokens.typography.fontSize.sm};
-    color: ${tokens.colors.textMuted};
-    max-width: 500px;
+    font-size: 13px;
+    color: var(--cc-text-muted);
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.5;
   }
 
   .processing-grid {
     display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: ${tokens.spacing.xl};
+    grid-template-columns: 1fr 280px;
+    gap: 32px;
     align-items: start;
   }
 
   .processing-left {
     display: flex;
     flex-direction: column;
-    gap: ${tokens.spacing.lg};
+    gap: 20px;
   }
 
   .processing-right {
     display: flex;
     flex-direction: column;
-    gap: ${tokens.spacing.lg};
+    gap: 20px;
   }
 
   .processing-card-header {
-    margin-bottom: ${tokens.spacing.lg};
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--cc-border);
   }
 
   .processing-card-title {
-    font-size: ${tokens.typography.fontSize.lg};
-    font-weight: ${tokens.typography.fontWeight.semibold};
-    color: ${tokens.colors.textPrimary};
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--cc-text);
     margin: 0;
+    letter-spacing: -0.01em;
   }
 
   .processing-progress {
-    margin-bottom: ${tokens.spacing.xl};
+    margin-bottom: 24px;
   }
 
   .processing-steps {
-    margin-bottom: ${tokens.spacing.xl};
-    padding-bottom: ${tokens.spacing.lg};
-    border-bottom: 1px solid ${tokens.colors.surfaceBorder};
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--cc-border);
   }
 
   .processing-details-box {
-    padding: ${tokens.spacing.base};
-    background-color: rgba(0, 0, 0, 0.02);
-    border-radius: ${tokens.radius.md};
-    margin-bottom: ${tokens.spacing.lg};
+    padding: 16px;
+    background: var(--cc-surface-2);
+    border-radius: var(--cc-radius-md);
+    margin-bottom: 20px;
   }
 
   .processing-details-title {
-    font-size: ${tokens.typography.fontSize.sm};
-    font-weight: ${tokens.typography.fontWeight.semibold};
-    color: ${tokens.colors.textPrimary};
-    margin: 0 0 ${tokens.spacing.md} 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cc-text);
+    margin: 0 0 12px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
   }
 
   .processing-details-accordion {
-    margin-bottom: ${tokens.spacing.lg};
+    margin-bottom: 20px;
   }
 
   .processing-details-toggle {
@@ -394,70 +321,74 @@ const processingCSS = `
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: ${tokens.spacing.md};
-    font-size: ${tokens.typography.fontSize.sm};
-    font-weight: ${tokens.typography.fontWeight.medium};
-    color: ${tokens.colors.primary};
-    background-color: rgba(0, 102, 204, 0.04);
-    border: 1px solid rgba(0, 102, 204, 0.1);
-    border-radius: ${tokens.radius.md};
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--cc-primary);
+    background: var(--cc-primary-light);
+    border: 1px solid var(--cc-primary);
+    border-color: rgba(37, 99, 235, 0.2);
+    border-radius: var(--cc-radius-md);
     cursor: pointer;
-    transition: background-color ${tokens.transitions.fast};
+    transition: all 150ms ease;
   }
 
   .processing-details-toggle:hover {
-    background-color: rgba(0, 102, 204, 0.08);
+    background: var(--cc-primary-light);
   }
 
   .processing-details-content {
-    padding: ${tokens.spacing.base};
-    margin-top: ${tokens.spacing.sm};
-    background-color: rgba(0, 0, 0, 0.02);
-    border-radius: ${tokens.radius.md};
+    padding: 16px;
+    margin-top: 8px;
+    background: var(--cc-surface-2);
+    border-radius: var(--cc-radius-md);
   }
 
   .processing-warning {
-    margin-bottom: ${tokens.spacing.lg};
+    margin-bottom: 20px;
   }
 
   .processing-actions {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: ${tokens.spacing.md};
+    gap: 12px;
+    padding-top: 8px;
   }
 
   .processing-actions button:first-child {
     width: 100%;
-    max-width: 280px;
+    max-width: 260px;
   }
 
   .processing-link {
-    padding: 0;
-    font-size: ${tokens.typography.fontSize.sm};
-    font-weight: ${tokens.typography.fontWeight.medium};
-    color: ${tokens.colors.primary};
-    background: none;
+    padding: 8px 12px;
+    margin: -8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--cc-primary);
+    background: transparent;
     border: none;
+    border-radius: 8px;
     cursor: pointer;
-    transition: opacity ${tokens.transitions.fast};
+    transition: background-color 150ms ease;
   }
 
   .processing-link:hover {
-    opacity: 0.7;
+    background: var(--cc-primary-light);
   }
 
   .processing-info-title {
-    font-size: ${tokens.typography.fontSize.sm};
-    font-weight: ${tokens.typography.fontWeight.semibold};
-    color: ${tokens.colors.textPrimary};
-    margin-bottom: ${tokens.spacing.md};
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cc-text);
+    margin-bottom: 12px;
   }
 
   .processing-illustration {
     display: flex;
     justify-content: center;
-    padding: ${tokens.spacing.lg};
+    padding: 20px;
   }
 
   .details-list {
@@ -466,9 +397,9 @@ const processingCSS = `
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: ${tokens.spacing.sm};
-    font-size: ${tokens.typography.fontSize.sm};
-    color: ${tokens.colors.textSecondary};
+    gap: 10px;
+    font-size: 13px;
+    color: var(--cc-text-secondary);
     line-height: 1.5;
   }
 
@@ -478,8 +409,8 @@ const processingCSS = `
   }
 
   .details-list strong {
-    color: ${tokens.colors.textPrimary};
-    font-weight: ${tokens.typography.fontWeight.medium};
+    color: var(--cc-text);
+    font-weight: 600;
   }
 
   /* Desktop only */
@@ -495,7 +426,7 @@ const processingCSS = `
   @media (max-width: 900px) {
     .processing-grid {
       grid-template-columns: 1fr;
-      gap: ${tokens.spacing.lg};
+      gap: 24px;
     }
 
     .processing-right {
@@ -514,19 +445,21 @@ const processingCSS = `
   /* Mobile */
   @media (max-width: 640px) {
     .processing-header {
-      margin-bottom: ${tokens.spacing.lg};
+      margin-bottom: 24px;
+      text-align: left;
     }
 
     .processing-title {
-      font-size: 1.5rem;
+      font-size: 1.375rem;
     }
 
     .processing-subtitle {
-      font-size: ${tokens.typography.fontSize.sm};
+      font-size: 14px;
     }
 
     .processing-note {
-      font-size: ${tokens.typography.fontSize.xs};
+      font-size: 12px;
+      margin: 0;
     }
   }
 `

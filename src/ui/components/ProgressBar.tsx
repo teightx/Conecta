@@ -1,5 +1,3 @@
-import { tokens } from '../styles/tokens'
-
 interface ProgressBarProps {
   percent: number
   showLabel?: boolean
@@ -7,7 +5,7 @@ interface ProgressBarProps {
 
 /**
  * Barra de progresso horizontal
- * Com label opcional à direita
+ * Suporta light/dark mode via CSS variables
  */
 export function ProgressBar({ percent, showLabel = true }: ProgressBarProps) {
   const clampedPercent = Math.min(100, Math.max(0, percent))
@@ -33,29 +31,30 @@ const progressBarCSS = `
   .progress-bar-wrapper {
     display: flex;
     align-items: center;
-    gap: ${tokens.spacing.md};
+    gap: 12px;
     width: 100%;
   }
 
   .progress-bar-track {
     flex: 1;
     height: 8px;
-    background-color: rgba(0, 0, 0, 0.06);
+    background: var(--cc-surface-2);
+    border: 1px solid var(--cc-border);
     border-radius: 4px;
     overflow: hidden;
   }
 
   .progress-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, ${tokens.colors.primary} 0%, #3d8bdb 100%);
+    background: linear-gradient(90deg, var(--cc-primary) 0%, var(--cc-primary-hover) 100%);
     border-radius: 4px;
     transition: width 300ms ease-out;
   }
 
   .progress-bar-label {
-    font-size: ${tokens.typography.fontSize.sm};
-    font-weight: ${tokens.typography.fontWeight.semibold};
-    color: ${tokens.colors.textPrimary};
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--cc-text);
     min-width: 40px;
     text-align: right;
   }

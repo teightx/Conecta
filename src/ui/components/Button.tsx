@@ -1,5 +1,4 @@
 import { type ButtonHTMLAttributes, type ReactNode } from 'react'
-import { tokens } from '../styles/tokens'
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost'
 
@@ -11,14 +10,14 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 /**
  * Botão base reutilizável
- * Variantes: primary, secondary, ghost
- * Estados: disabled, loading
+ * Usa CSS variables para suporte a light/dark mode
  */
 export function Button({
   variant = 'primary',
   loading = false,
   disabled,
   children,
+  className = '',
   style,
   ...props
 }: ButtonProps) {
@@ -26,25 +25,15 @@ export function Button({
 
   return (
     <button
+      className={`cc-btn cc-btn--${variant} ${className}`}
       disabled={isDisabled}
-      style={{
-        ...baseStyles,
-        ...variantStyles[variant],
-        ...(isDisabled ? disabledStyles : {}),
-        ...style,
-      }}
-      onMouseEnter={(e) => {
-        if (!isDisabled) {
-          Object.assign(e.currentTarget.style, hoverStyles[variant])
-        }
-      }}
-      onMouseLeave={(e) => {
-        Object.assign(e.currentTarget.style, variantStyles[variant])
-      }}
+      style={style}
       {...props}
     >
       {loading && <Spinner />}
       <span style={{ opacity: loading ? 0.7 : 1 }}>{children}</span>
+      
+      <style>{buttonCSS}</style>
     </button>
   )
 }
@@ -62,10 +51,9 @@ function Spinner() {
       fill="none"
       style={{
         marginRight: '8px',
-        animation: 'spin 1s linear infinite',
+        animation: 'cc-spin 1s linear infinite',
       }}
     >
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       <circle
         cx="8"
         cy="8"
@@ -87,58 +75,65 @@ function Spinner() {
 }
 
 // ─────────────────────────────────────────────────────────────
-// ESTILOS
+// CSS
 // ─────────────────────────────────────────────────────────────
 
-const baseStyles: React.CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: '6px',
-  padding: '10px 20px',
-  fontSize: tokens.typography.fontSize.base,
-  fontWeight: tokens.typography.fontWeight.medium,
-  fontFamily: 'inherit',
-  lineHeight: '1.4',
-  borderRadius: tokens.radius.md,
-  border: 'none',
-  cursor: 'pointer',
-  transition: `all ${tokens.transitions.normal}`,
-  whiteSpace: 'nowrap',
-}
+const buttonCSS = `
+  @keyframes cc-spin {
+    to { transform: rotate(360deg); }
+  }
 
-const variantStyles: Record<ButtonVariant, React.CSSProperties> = {
-  primary: {
-    backgroundColor: tokens.colors.primary,
-    color: tokens.colors.textInverse,
-    boxShadow: `0 1px 2px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.1)`,
-  },
-  secondary: {
-    backgroundColor: tokens.colors.surface,
-    color: tokens.colors.textPrimary,
-    border: `1px solid ${tokens.colors.surfaceBorder}`,
-    boxShadow: tokens.shadows.sm,
-  },
-  ghost: {
-    backgroundColor: 'transparent',
-    color: tokens.colors.primary,
-  },
-}
+  .cc-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 12px 24px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: inherit;
+    line-height: 1.2;
+    border-radius: var(--cc-radius-lg);
+    border: none;
+    cursor: pointer;
+    transition: all 200ms ease;
+    white-space: nowrap;
+  }
 
-const hoverStyles: Record<ButtonVariant, React.CSSProperties> = {
-  primary: {
-    backgroundColor: tokens.colors.primaryHover,
-  },
-  secondary: {
-    backgroundColor: tokens.colors.surfaceHover,
-    borderColor: 'rgba(0, 0, 0, 0.1)',
-  },
-  ghost: {
-    backgroundColor: tokens.colors.primaryLight,
-  },
-}
+  .cc-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 
-const disabledStyles: React.CSSProperties = {
-  opacity: 0.5,
-  cursor: 'not-allowed',
-}
+  .cc-btn--primary {
+    background: var(--cc-primary);
+    color: var(--cc-text-inverse);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .cc-btn--primary:hover:not(:disabled) {
+    background: var(--cc-primary-hover);
+  }
+
+  .cc-btn--secondary {
+    background: var(--cc-surface);
+    color: var(--cc-text);
+    border: 1px solid var(--cc-border);
+    box-shadow: var(--cc-shadow-sm);
+  }
+
+  .cc-btn--secondary:hover:not(:disabled) {
+    background: var(--cc-surface-2);
+    border-color: var(--cc-border-strong);
+  }
+
+  .cc-btn--ghost {
+    background: transparent;
+    color: var(--cc-primary);
+  }
+
+  .cc-btn--ghost:hover:not(:disabled) {
+    background: var(--cc-primary-light);
+  }
+`

@@ -1,4 +1,3 @@
-import { tokens } from '../styles/tokens'
 import { Badge } from './Badge'
 import type { DiagnosticsItem } from '../../core/domain/types'
 
@@ -7,7 +6,8 @@ interface DiagnosticsListProps {
 }
 
 /**
- * Lista de diagnósticos (não tabela pesada)
+ * Lista de diagnósticos
+ * Suporta light/dark mode via CSS variables
  */
 export function DiagnosticsList({ diagnostics }: DiagnosticsListProps) {
   if (diagnostics.length === 0) {
@@ -53,39 +53,39 @@ const diagnosticsCSS = `
   .diagnostics-list {
     display: flex;
     flex-direction: column;
-    gap: ${tokens.spacing.sm};
+    gap: 8px;
   }
 
   .diagnostics-item {
-    padding: ${tokens.spacing.base};
-    background-color: rgba(0, 0, 0, 0.01);
-    border: 1px solid ${tokens.colors.surfaceBorder};
-    border-radius: ${tokens.radius.md};
+    padding: 14px;
+    background: var(--cc-surface-2);
+    border: 1px solid var(--cc-border);
+    border-radius: var(--cc-radius-md);
   }
 
   .diagnostics-header {
     display: flex;
     align-items: center;
-    gap: ${tokens.spacing.md};
-    margin-bottom: ${tokens.spacing.xs};
+    gap: 12px;
+    margin-bottom: 6px;
   }
 
   .diagnostics-code {
-    font-family: ${tokens.typography.fontFamilyMono};
-    font-size: ${tokens.typography.fontSize.xs};
-    color: ${tokens.colors.textMuted};
+    font-family: var(--cc-font-mono);
+    font-size: 11px;
+    color: var(--cc-text-muted);
   }
 
   .diagnostics-message {
-    font-size: ${tokens.typography.fontSize.sm};
-    color: ${tokens.colors.textSecondary};
+    font-size: 14px;
+    color: var(--cc-text-secondary);
     margin: 0;
     line-height: 1.5;
   }
 
   .diagnostics-empty {
-    padding: ${tokens.spacing.xl};
+    padding: 32px;
     text-align: center;
-    color: ${tokens.colors.textMuted};
+    color: var(--cc-text-muted);
   }
 `

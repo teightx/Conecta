@@ -1,5 +1,4 @@
 import { useRef, useState, type DragEvent, type ChangeEvent } from 'react'
-import { tokens } from '../styles/tokens'
 import { Badge } from './Badge'
 import { KeyValueList, type KeyValueItem } from './KeyValueList'
 
@@ -198,7 +197,7 @@ function UploadIcon() {
       height="32"
       viewBox="0 0 24 24"
       fill="none"
-      stroke={tokens.colors.textMuted}
+      stroke="var(--cc-text-muted)"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -217,7 +216,7 @@ function FileIcon() {
       height="24"
       viewBox="0 0 24 24"
       fill="none"
-      stroke={tokens.colors.primary}
+      stroke="var(--cc-primary)"
       strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -234,45 +233,49 @@ function FileIcon() {
 
 const fileCardCSS = `
   .file-card {
-    background-color: ${tokens.colors.surface};
-    border-radius: ${tokens.radius.lg};
-    border: 1px solid ${tokens.colors.surfaceBorder};
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    background: var(--cc-surface);
+    border-radius: var(--cc-radius-lg);
+    border: 1px solid var(--cc-border);
+    box-shadow: var(--cc-shadow-glass);
+    backdrop-filter: var(--cc-blur);
+    -webkit-backdrop-filter: var(--cc-blur);
     overflow: hidden;
+    transition: background 300ms ease, border-color 300ms ease;
   }
 
   .file-card-header {
     display: flex;
     align-items: center;
-    gap: ${tokens.spacing.md};
-    padding: ${tokens.spacing.base} ${tokens.spacing.lg};
-    border-bottom: 1px solid ${tokens.colors.surfaceBorder};
-    background-color: rgba(0, 0, 0, 0.01);
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--cc-border);
+    background: var(--cc-surface-2);
   }
 
   .file-card-step {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 22px;
-    height: 22px;
-    font-size: ${tokens.typography.fontSize.xs};
-    font-weight: ${tokens.typography.fontWeight.semibold};
-    color: ${tokens.colors.primary};
-    background-color: rgba(0, 102, 204, 0.08);
-    border-radius: ${tokens.radius.full};
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--cc-primary);
+    background: var(--cc-primary-light);
+    border-radius: 8px;
     flex-shrink: 0;
   }
 
   .file-card-title {
-    font-size: ${tokens.typography.fontSize.sm};
-    font-weight: ${tokens.typography.fontWeight.medium};
-    color: ${tokens.colors.textPrimary};
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--cc-text);
     margin: 0;
+    letter-spacing: -0.01em;
   }
 
   .file-card-content {
-    padding: ${tokens.spacing.lg};
+    padding: 20px;
   }
 
   .file-card-dropzone {
@@ -280,60 +283,66 @@ const fileCardCSS = `
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: ${tokens.spacing.md};
-    padding: ${tokens.spacing.xl} ${tokens.spacing.lg};
-    border-radius: ${tokens.radius.md};
-    border: 1.5px dashed rgba(0, 0, 0, 0.12);
+    gap: 12px;
+    padding: 32px 24px;
+    border-radius: var(--cc-radius-md);
+    border: 1.5px dashed var(--cc-border-strong);
+    background: var(--cc-surface-2);
     cursor: pointer;
-    transition: all ${tokens.transitions.normal};
+    transition: all 200ms ease;
     text-align: center;
   }
 
   .file-card-dropzone:hover {
-    border-color: rgba(0, 0, 0, 0.2);
-    background-color: rgba(0, 0, 0, 0.01);
+    border-color: var(--cc-primary);
+    background: var(--cc-primary-light);
   }
 
   .file-card-dropzone.dragging {
-    border-color: ${tokens.colors.primary};
-    background-color: rgba(0, 102, 204, 0.02);
+    border-color: var(--cc-primary);
+    background: var(--cc-primary-light);
+    border-style: solid;
   }
 
   .file-card-dropzone.error {
-    border-color: ${tokens.colors.error};
+    border-color: var(--cc-danger);
+    background: var(--cc-danger-light);
   }
 
   .file-card-dropzone-text {
-    font-size: ${tokens.typography.fontSize.sm};
-    color: ${tokens.colors.textSecondary};
+    font-size: 14px;
+    color: var(--cc-text-secondary);
+    line-height: 1.5;
   }
 
   .file-card-dropzone-text strong {
-    font-weight: ${tokens.typography.fontWeight.medium};
-    color: ${tokens.colors.textPrimary};
+    font-weight: 600;
+    color: var(--cc-primary);
   }
 
   .file-card-dropzone-hint {
-    font-size: ${tokens.typography.fontSize.xs};
-    color: ${tokens.colors.textMuted};
+    font-size: 12px;
+    color: var(--cc-text-muted);
   }
 
   .file-card-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: ${tokens.spacing.base};
-    padding: ${tokens.spacing.md};
-    background-color: rgba(0, 0, 0, 0.02);
-    border-radius: ${tokens.radius.md};
-    margin-bottom: ${tokens.spacing.base};
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--cc-primary-light);
+    border: 1px solid var(--cc-primary);
+    border-color: rgba(37, 99, 235, 0.15);
+    border-radius: var(--cc-radius-md);
+    margin-bottom: 12px;
     flex-wrap: wrap;
   }
 
   .file-card-info {
     display: flex;
     align-items: center;
-    gap: ${tokens.spacing.md};
+    gap: 12px;
     min-width: 0;
     flex: 1;
   }
@@ -341,48 +350,49 @@ const fileCardCSS = `
   .file-card-details {
     display: flex;
     flex-direction: column;
+    gap: 2px;
     min-width: 0;
   }
 
   .file-card-name {
-    font-size: ${tokens.typography.fontSize.sm};
-    font-weight: ${tokens.typography.fontWeight.medium};
-    color: ${tokens.colors.textPrimary};
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cc-text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 200px;
+    max-width: 220px;
   }
 
   .file-card-size {
-    font-size: ${tokens.typography.fontSize.xs};
-    color: ${tokens.colors.textMuted};
+    font-size: 12px;
+    color: var(--cc-text-muted);
   }
 
   .file-card-loading {
-    height: 2px;
-    background-color: rgba(0, 102, 204, 0.1);
-    border-radius: 1px;
-    margin-bottom: ${tokens.spacing.base};
+    height: 3px;
+    background: var(--cc-primary-light);
+    border-radius: 2px;
+    margin-bottom: 12px;
     overflow: hidden;
   }
 
   .file-card-loading-bar {
     width: 30%;
     height: 100%;
-    background-color: ${tokens.colors.primary};
-    border-radius: 1px;
+    background: var(--cc-primary);
+    border-radius: 2px;
     animation: file-card-loading 1.5s ease-in-out infinite;
   }
 
   @keyframes file-card-loading {
     0% { transform: translateX(-100%); }
-    50% { transform: translateX(200%); }
+    50% { transform: translateX(250%); }
     100% { transform: translateX(-100%); }
   }
 
   .file-card-metrics {
-    margin-bottom: ${tokens.spacing.base};
+    margin-bottom: 12px;
   }
 
   .file-card-footer {
@@ -390,69 +400,71 @@ const fileCardCSS = `
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: ${tokens.spacing.sm};
-    padding-top: ${tokens.spacing.md};
-    border-top: 1px solid ${tokens.colors.surfaceBorder};
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--cc-border);
   }
 
   .file-card-footer-left,
   .file-card-footer-right {
     display: flex;
     align-items: center;
-    gap: ${tokens.spacing.sm};
+    gap: 8px;
   }
 
   .file-card-format {
-    font-size: ${tokens.typography.fontSize.xs};
-    color: ${tokens.colors.textMuted};
+    font-size: 12px;
+    color: var(--cc-text-muted);
   }
 
   .file-card-link {
-    padding: 0;
-    font-size: ${tokens.typography.fontSize.xs};
-    font-weight: ${tokens.typography.fontWeight.medium};
-    color: ${tokens.colors.primary};
+    padding: 4px 8px;
+    margin: -4px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--cc-primary);
     background-color: transparent;
     border: none;
+    border-radius: 6px;
     cursor: pointer;
-    transition: opacity ${tokens.transitions.fast};
+    transition: background-color 150ms ease;
   }
 
   .file-card-link:hover {
-    opacity: 0.7;
+    background: var(--cc-primary-light);
   }
 
   .file-card-sep {
-    color: ${tokens.colors.textMuted};
-    font-size: ${tokens.typography.fontSize.xs};
+    color: var(--cc-border-strong);
+    font-size: 12px;
   }
 
   .file-card-error {
-    margin-top: ${tokens.spacing.sm};
-    font-size: ${tokens.typography.fontSize.xs};
-    color: ${tokens.colors.error};
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--cc-danger);
   }
 
   /* Mobile */
   @media (max-width: 640px) {
     .file-card-header {
-      padding: ${tokens.spacing.md} ${tokens.spacing.base};
+      padding: 12px 16px;
     }
 
     .file-card-content {
-      padding: ${tokens.spacing.base};
+      padding: 16px;
     }
 
     .file-card-dropzone {
-      padding: ${tokens.spacing.lg} ${tokens.spacing.base};
+      padding: 24px 16px;
     }
 
     .file-card-name {
-      max-width: 140px;
+      max-width: 160px;
     }
 
     .file-card-row {
-      padding: ${tokens.spacing.sm};
+      padding: 10px 12px;
     }
   }
 `

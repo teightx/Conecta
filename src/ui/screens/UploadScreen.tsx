@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
-import { tokens } from '../styles/tokens'
 import { Card } from '../components/Card'
-import { Button } from '../components/Button'
 import { FileUploadCard } from '../components/FileUploadCard'
 import { InlineBanner } from '../components/InlineBanner'
+import { ActionBar } from '../components/ActionBar'
+import { Illustration } from '../components/Illustration'
 import { BankParser } from '../../core/bank/BankParser'
 import { PrefeituraExtractor } from '../../core/prefeitura/PrefeituraExtractor'
 import type { KeyValueItem } from '../components/KeyValueList'
@@ -288,22 +288,6 @@ export function UploadScreen({
               tente novamente.
             </InlineBanner>
           )}
-
-          {/* Botão Gerar */}
-          <div className="upload-generate">
-            <Button
-              variant="primary"
-              disabled={!canGenerate}
-              onClick={handleGenerate}
-              style={{ width: '100%', maxWidth: '320px', padding: '14px 24px' }}
-            >
-              Gerar relatório
-            </Button>
-            <p className="upload-privacy">
-              <LockIcon />
-              Processamento local. Nada é enviado para servidor.
-            </p>
-          </div>
         </div>
 
         {/* Coluna direita - Informações */}
@@ -345,10 +329,18 @@ export function UploadScreen({
 
           {/* Ilustração */}
           <div className="upload-illustration">
-            <IllustrationSVG />
+            <Illustration name="upload" size="md" />
           </div>
         </aside>
       </div>
+
+      {/* Action Bar sticky com CTA */}
+      <ActionBar
+        primaryLabel="Gerar relatório"
+        onPrimary={handleGenerate}
+        primaryDisabled={!canGenerate}
+        helperText="Processamento local. Nada é enviado para servidor."
+      />
 
       <style>{uploadScreenCSS}</style>
     </div>
@@ -359,25 +351,6 @@ export function UploadScreen({
 // ÍCONES
 // ─────────────────────────────────────────────────────────────
 
-function LockIcon() {
-  return (
-    <svg
-      width="12"
-      height="12"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      style={{ marginRight: '6px', flexShrink: 0 }}
-    >
-      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-      <path d="M7 11V7a5 5 0 0110 0v4" />
-    </svg>
-  )
-}
-
 function CheckIcon() {
   return (
     <svg
@@ -385,71 +358,13 @@ function CheckIcon() {
       height="14"
       viewBox="0 0 24 24"
       fill="none"
-      stroke={tokens.colors.success}
+      stroke="var(--cc-success)"
       strokeWidth="2.5"
       strokeLinecap="round"
       strokeLinejoin="round"
       style={{ marginRight: '8px', flexShrink: 0 }}
     >
       <polyline points="20 6 9 17 4 12" />
-    </svg>
-  )
-}
-
-function IllustrationSVG() {
-  return (
-    <svg
-      width="180"
-      height="120"
-      viewBox="0 0 180 120"
-      fill="none"
-      style={{ opacity: 0.7, maxWidth: '100%', height: 'auto' }}
-    >
-      <rect
-        x="20"
-        y="30"
-        width="50"
-        height="65"
-        rx="4"
-        fill="#e8ecf2"
-        stroke="#c8cfd8"
-        strokeWidth="1"
-      />
-      <rect x="28" y="42" width="34" height="3" rx="1.5" fill="#b8c0cc" />
-      <rect x="28" y="50" width="28" height="3" rx="1.5" fill="#b8c0cc" />
-      <rect x="28" y="58" width="32" height="3" rx="1.5" fill="#b8c0cc" />
-      <rect x="28" y="66" width="20" height="3" rx="1.5" fill="#b8c0cc" />
-
-      <rect
-        x="110"
-        y="30"
-        width="50"
-        height="65"
-        rx="4"
-        fill="#e8ecf2"
-        stroke="#c8cfd8"
-        strokeWidth="1"
-      />
-      <rect x="118" y="42" width="34" height="3" rx="1.5" fill="#b8c0cc" />
-      <rect x="118" y="50" width="28" height="3" rx="1.5" fill="#b8c0cc" />
-      <rect x="118" y="58" width="32" height="3" rx="1.5" fill="#b8c0cc" />
-      <rect x="118" y="66" width="20" height="3" rx="1.5" fill="#b8c0cc" />
-
-      <path
-        d="M75 62 L90 55 L90 47 L105 62 L90 77 L90 69 L75 62"
-        fill={tokens.colors.primary}
-        opacity="0.6"
-      />
-
-      <circle cx="90" cy="100" r="12" fill={tokens.colors.success} opacity="0.15" />
-      <path
-        d="M84 100 L88 104 L96 96"
-        stroke={tokens.colors.success}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
     </svg>
   )
 }
@@ -464,64 +379,48 @@ const uploadScreenCSS = `
   }
 
   .upload-header {
-    margin-bottom: ${tokens.spacing.xl};
+    margin-bottom: 32px;
   }
 
   .upload-title {
     font-size: 1.875rem;
-    font-weight: ${tokens.typography.fontWeight.bold};
-    color: ${tokens.colors.textPrimary};
-    letter-spacing: ${tokens.typography.letterSpacing.tight};
-    margin-bottom: ${tokens.spacing.xs};
+    font-weight: 700;
+    color: var(--cc-text);
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
   }
 
   .upload-subtitle {
-    font-size: ${tokens.typography.fontSize.md};
-    color: ${tokens.colors.textSecondary};
-    line-height: ${tokens.typography.lineHeight.relaxed};
+    font-size: 16px;
+    color: var(--cc-text-secondary);
+    line-height: 1.6;
     max-width: 480px;
   }
 
   .upload-grid {
     display: grid;
     grid-template-columns: 1fr 300px;
-    gap: ${tokens.spacing.xl};
+    gap: 32px;
     align-items: start;
   }
 
   .upload-left {
     display: flex;
     flex-direction: column;
-    gap: ${tokens.spacing.lg};
+    gap: 20px;
   }
 
   .upload-right {
     display: flex;
     flex-direction: column;
-    gap: ${tokens.spacing.lg};
-  }
-
-  .upload-generate {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: ${tokens.spacing.md};
-    padding-top: ${tokens.spacing.base};
-  }
-
-  .upload-privacy {
-    display: flex;
-    align-items: center;
-    font-size: ${tokens.typography.fontSize.xs};
-    color: ${tokens.colors.textMuted};
-    text-align: center;
+    gap: 16px;
   }
 
   .upload-info-title {
-    font-size: ${tokens.typography.fontSize.sm};
-    font-weight: ${tokens.typography.fontWeight.semibold};
-    color: ${tokens.colors.textPrimary};
-    margin-bottom: ${tokens.spacing.md};
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--cc-text);
+    margin-bottom: 12px;
   }
 
   .upload-bullet-list {
@@ -530,16 +429,16 @@ const uploadScreenCSS = `
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: ${tokens.spacing.sm};
-    font-size: ${tokens.typography.fontSize.sm};
-    color: ${tokens.colors.textSecondary};
-    line-height: ${tokens.typography.lineHeight.relaxed};
+    gap: 8px;
+    font-size: 14px;
+    color: var(--cc-text-secondary);
+    line-height: 1.6;
   }
 
   .upload-bullet-list li::before {
     content: '→';
     margin-right: 8px;
-    color: ${tokens.colors.primary};
+    color: var(--cc-primary);
   }
 
   .upload-download-list {
@@ -549,8 +448,8 @@ const uploadScreenCSS = `
     display: flex;
     flex-direction: column;
     gap: 6px;
-    font-size: ${tokens.typography.fontSize.sm};
-    color: ${tokens.colors.textSecondary};
+    font-size: 14px;
+    color: var(--cc-text-secondary);
   }
 
   .upload-download-list li {
@@ -561,14 +460,14 @@ const uploadScreenCSS = `
   .upload-illustration {
     display: flex;
     justify-content: center;
-    padding: ${tokens.spacing.lg};
+    padding: 20px;
   }
 
   /* Tablet */
   @media (max-width: 900px) {
     .upload-grid {
       grid-template-columns: 1fr;
-      gap: ${tokens.spacing.lg};
+      gap: 24px;
     }
 
     .upload-right {
@@ -579,7 +478,7 @@ const uploadScreenCSS = `
   /* Mobile */
   @media (max-width: 640px) {
     .upload-header {
-      margin-bottom: ${tokens.spacing.lg};
+      margin-bottom: 24px;
     }
 
     .upload-title {
@@ -587,27 +486,23 @@ const uploadScreenCSS = `
     }
 
     .upload-subtitle {
-      font-size: ${tokens.typography.fontSize.sm};
+      font-size: 14px;
     }
 
     .upload-grid {
-      gap: ${tokens.spacing.base};
+      gap: 16px;
     }
 
     .upload-left {
-      gap: ${tokens.spacing.base};
+      gap: 16px;
     }
 
     .upload-right {
-      gap: ${tokens.spacing.base};
+      gap: 12px;
     }
 
     .upload-illustration {
-      padding: ${tokens.spacing.base};
-    }
-
-    .upload-illustration svg {
-      max-width: 160px;
+      padding: 16px;
     }
   }
 `

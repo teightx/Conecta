@@ -1,5 +1,4 @@
 import { type ReactNode } from 'react'
-import { tokens } from '../styles/tokens'
 
 type BannerVariant = 'warning' | 'info' | 'error'
 
@@ -11,35 +10,27 @@ interface InlineBannerProps {
 
 /**
  * Banner inline para avisos e informações
- * Variantes: warning (amarelo), info (azul), error (vermelho)
+ * Suporta light/dark mode via CSS classes
  */
 export function InlineBanner({
   variant = 'info',
   title,
   children,
 }: InlineBannerProps) {
-  const colors = variantColors[variant]
-
   return (
-    <div
-      className="inline-banner"
-      style={{
-        backgroundColor: colors.bg,
-        borderColor: colors.border,
-      }}
-    >
-      <span className="inline-banner-icon" style={{ color: colors.icon }}>
+    <div className={`inline-banner inline-banner--${variant}`}>
+      <span className="inline-banner-icon">
         {variant === 'warning' && <WarningIcon />}
         {variant === 'info' && <InfoIcon />}
         {variant === 'error' && <ErrorIcon />}
       </span>
       <div className="inline-banner-content">
         {title && (
-          <strong className="inline-banner-title" style={{ color: colors.title }}>
+          <strong className="inline-banner-title">
             {title}
           </strong>
         )}
-        <span className="inline-banner-text" style={{ color: colors.text }}>
+        <span className="inline-banner-text">
           {children}
         </span>
       </div>
@@ -47,37 +38,6 @@ export function InlineBanner({
       <style>{bannerCSS}</style>
     </div>
   )
-}
-
-// ─────────────────────────────────────────────────────────────
-// CORES POR VARIANTE
-// ─────────────────────────────────────────────────────────────
-
-const variantColors: Record<
-  BannerVariant,
-  { bg: string; border: string; icon: string; title: string; text: string }
-> = {
-  warning: {
-    bg: 'rgba(212, 167, 44, 0.08)',
-    border: 'rgba(212, 167, 44, 0.2)',
-    icon: '#9a6700',
-    title: '#9a6700',
-    text: '#6e5000',
-  },
-  info: {
-    bg: 'rgba(9, 105, 218, 0.06)',
-    border: 'rgba(9, 105, 218, 0.15)',
-    icon: '#0550ae',
-    title: '#0550ae',
-    text: '#0969da',
-  },
-  error: {
-    bg: 'rgba(255, 59, 48, 0.06)',
-    border: 'rgba(255, 59, 48, 0.15)',
-    icon: '#cf222e',
-    title: '#cf222e',
-    text: '#cf222e',
-  },
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -149,10 +109,31 @@ const bannerCSS = `
   .inline-banner {
     display: flex;
     align-items: flex-start;
-    gap: ${tokens.spacing.md};
-    padding: ${tokens.spacing.base};
-    border-radius: ${tokens.radius.md};
+    gap: 12px;
+    padding: 14px;
+    border-radius: var(--cc-radius-md);
     border: 1px solid;
+  }
+
+  .inline-banner--warning {
+    background: var(--cc-warning-light);
+    border-color: var(--cc-warning);
+    border-color: rgba(217, 119, 6, 0.25);
+    color: var(--cc-warning);
+  }
+
+  .inline-banner--info {
+    background: var(--cc-info-light);
+    border-color: var(--cc-info);
+    border-color: rgba(8, 145, 178, 0.25);
+    color: var(--cc-info);
+  }
+
+  .inline-banner--error {
+    background: var(--cc-danger-light);
+    border-color: var(--cc-danger);
+    border-color: rgba(220, 38, 38, 0.25);
+    color: var(--cc-danger);
   }
 
   .inline-banner-icon {
@@ -170,13 +151,14 @@ const bannerCSS = `
   }
 
   .inline-banner-title {
-    font-size: ${tokens.typography.fontSize.sm};
-    font-weight: ${tokens.typography.fontWeight.semibold};
+    font-size: 14px;
+    font-weight: 600;
     line-height: 1.3;
   }
 
   .inline-banner-text {
-    font-size: ${tokens.typography.fontSize.sm};
+    font-size: 14px;
     line-height: 1.5;
+    opacity: 0.9;
   }
 `

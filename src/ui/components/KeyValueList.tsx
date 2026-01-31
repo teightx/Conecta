@@ -1,5 +1,3 @@
-import { tokens } from '../styles/tokens'
-
 export interface KeyValueItem {
   label: string
   value: string | number | undefined
@@ -13,56 +11,22 @@ interface KeyValueListProps {
 
 /**
  * Lista de chave-valor com ícone opcional
- * Para exibir métricas como "Linhas lidas: 123"
+ * Suporta light/dark mode via CSS variables
  */
 export function KeyValueList({ items, size = 'sm' }: KeyValueListProps) {
-  const fontSize =
-    size === 'sm' ? tokens.typography.fontSize.xs : tokens.typography.fontSize.sm
+  const fontSize = size === 'sm' ? '12px' : '14px'
 
   return (
-    <ul
-      style={{
-        listStyle: 'none',
-        margin: 0,
-        padding: 0,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '6px',
-      }}
-    >
+    <ul className="kv-list">
       {items.map((item, index) => (
-        <li
-          key={index}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            fontSize,
-            color: tokens.colors.textSecondary,
-            lineHeight: 1.5,
-          }}
-        >
-          <span
-            style={{
-              color: tokens.colors.textMuted,
-              fontSize: '10px',
-              width: '12px',
-              textAlign: 'center',
-            }}
-          >
-            {getIcon(item.icon)}
-          </span>
-          <span style={{ color: tokens.colors.textMuted }}>{item.label}:</span>
-          <span
-            style={{
-              color: tokens.colors.textPrimary,
-              fontWeight: tokens.typography.fontWeight.medium,
-            }}
-          >
-            {item.value ?? '—'}
-          </span>
+        <li key={index} className="kv-item" style={{ fontSize }}>
+          <span className="kv-icon">{getIcon(item.icon)}</span>
+          <span className="kv-label">{item.label}:</span>
+          <span className="kv-value">{item.value ?? '—'}</span>
         </li>
       ))}
+
+      <style>{kvListCSS}</style>
     </ul>
   )
 }
@@ -78,3 +42,38 @@ function getIcon(icon?: 'bullet' | 'check' | 'arrow'): string {
       return '•'
   }
 }
+
+const kvListCSS = `
+  .kv-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .kv-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--cc-text-secondary);
+    line-height: 1.5;
+  }
+
+  .kv-icon {
+    color: var(--cc-text-muted);
+    font-size: 10px;
+    width: 12px;
+    text-align: center;
+  }
+
+  .kv-label {
+    color: var(--cc-text-muted);
+  }
+
+  .kv-value {
+    color: var(--cc-text);
+    font-weight: 500;
+  }
+`

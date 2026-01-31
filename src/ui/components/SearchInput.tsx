@@ -1,5 +1,3 @@
-import { tokens } from '../styles/tokens'
-
 interface SearchInputProps {
   value: string
   onChange: (value: string) => void
@@ -8,6 +6,7 @@ interface SearchInputProps {
 
 /**
  * Input de busca com ícone de lupa e botão de limpar
+ * Suporta light/dark mode via CSS variables
  */
 export function SearchInput({
   value,
@@ -46,7 +45,7 @@ function SearchIcon() {
       height="16"
       viewBox="0 0 24 24"
       fill="none"
-      stroke={tokens.colors.textMuted}
+      stroke="var(--cc-text-muted)"
       strokeWidth="2"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -94,22 +93,22 @@ const searchInputCSS = `
   .search-input {
     width: 100%;
     padding: 10px 36px 10px 40px;
-    font-size: ${tokens.typography.fontSize.sm};
-    color: ${tokens.colors.textPrimary};
-    background-color: ${tokens.colors.surface};
-    border: 1px solid ${tokens.colors.surfaceBorder};
-    border-radius: ${tokens.radius.md};
-    transition: all ${tokens.transitions.fast};
+    font-size: 14px;
+    color: var(--cc-text);
+    background: var(--cc-surface);
+    border: 1px solid var(--cc-border);
+    border-radius: var(--cc-radius-md);
+    transition: all 150ms ease;
   }
 
   .search-input::placeholder {
-    color: ${tokens.colors.textMuted};
+    color: var(--cc-text-muted);
   }
 
   .search-input:focus {
     outline: none;
-    border-color: ${tokens.colors.primary};
-    box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.15);
+    border-color: var(--cc-primary);
+    box-shadow: var(--cc-shadow-focus);
   }
 
   .search-clear {
@@ -121,16 +120,16 @@ const searchInputCSS = `
     width: 24px;
     height: 24px;
     padding: 0;
-    color: ${tokens.colors.textMuted};
+    color: var(--cc-text-muted);
     background: none;
     border: none;
-    border-radius: ${tokens.radius.full};
+    border-radius: 50%;
     cursor: pointer;
-    transition: all ${tokens.transitions.fast};
+    transition: all 150ms ease;
   }
 
   .search-clear:hover {
-    color: ${tokens.colors.textSecondary};
-    background-color: rgba(0, 0, 0, 0.05);
+    color: var(--cc-text-secondary);
+    background: var(--cc-surface-2);
   }
 `

@@ -1,4 +1,3 @@
-import { tokens } from '../styles/tokens'
 import { Badge } from './Badge'
 import type { ReconciliationItem } from '../../core/domain/types'
 
@@ -8,6 +7,7 @@ interface ResultTableProps {
 
 /**
  * Tabela de resultados para desktop
+ * Suporta light/dark mode via CSS variables
  */
 export function ResultTable({ items }: ResultTableProps) {
   const formatMoney = (value?: number) => {
@@ -79,72 +79,88 @@ export function ResultTable({ items }: ResultTableProps) {
 const tableCSS = `
   .result-table-wrapper {
     overflow-x: auto;
+    border-radius: var(--cc-radius-md);
   }
 
   .result-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: ${tokens.typography.fontSize.sm};
+    font-size: 13px;
   }
 
   .result-table th {
-    padding: ${tokens.spacing.md} ${tokens.spacing.base};
+    padding: 12px 14px;
     text-align: left;
-    font-weight: ${tokens.typography.fontWeight.semibold};
-    color: ${tokens.colors.textSecondary};
-    background-color: rgba(0, 0, 0, 0.02);
-    border-bottom: 1px solid ${tokens.colors.surfaceBorder};
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--cc-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: var(--cc-surface-2);
+    border-bottom: 1px solid var(--cc-border);
     white-space: nowrap;
   }
 
   .result-table td {
-    padding: ${tokens.spacing.md} ${tokens.spacing.base};
-    color: ${tokens.colors.textPrimary};
-    border-bottom: 1px solid ${tokens.colors.surfaceBorder};
+    padding: 12px 14px;
+    color: var(--cc-text);
+    border-bottom: 1px solid var(--cc-border);
     vertical-align: middle;
   }
 
+  .result-table tbody tr {
+    transition: background-color 100ms ease;
+  }
+
   .result-table tbody tr:hover {
-    background-color: rgba(0, 0, 0, 0.01);
+    background: var(--cc-primary-light);
+  }
+
+  .result-table tbody tr:last-child td {
+    border-bottom: none;
   }
 
   .result-table-mono {
-    font-family: ${tokens.typography.fontFamilyMono};
-    font-size: ${tokens.typography.fontSize.xs};
+    font-family: var(--cc-font-mono);
+    font-size: 12px;
+    font-weight: 500;
   }
 
   .result-table-money {
-    font-family: ${tokens.typography.fontFamilyMono};
-    font-size: ${tokens.typography.fontSize.xs};
+    font-family: var(--cc-font-mono);
+    font-size: 12px;
+    font-weight: 500;
     text-align: right;
     white-space: nowrap;
   }
 
   .result-table-name {
-    max-width: 200px;
+    max-width: 180px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   .result-table-cpf {
-    font-family: ${tokens.typography.fontFamilyMono};
-    font-size: ${tokens.typography.fontSize.xs};
+    font-family: var(--cc-font-mono);
+    font-size: 12px;
     white-space: nowrap;
+    color: var(--cc-text-secondary);
   }
 
   .result-table-obs {
-    font-size: ${tokens.typography.fontSize.xs};
-    color: ${tokens.colors.textMuted};
-    max-width: 200px;
+    font-size: 12px;
+    color: var(--cc-text-muted);
+    max-width: 180px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   .result-table-empty {
-    padding: ${tokens.spacing['2xl']};
+    padding: 48px 24px;
     text-align: center;
-    color: ${tokens.colors.textMuted};
+    color: var(--cc-text-muted);
+    font-size: 14px;
   }
 `

@@ -1,31 +1,38 @@
 import { type ReactNode, type CSSProperties } from 'react'
-import { tokens } from '../styles/tokens'
 
 interface CardProps {
   children: ReactNode
   header?: ReactNode
   padding?: 'sm' | 'md' | 'lg'
+  variant?: 'glass' | 'solid'
   style?: CSSProperties
+  className?: string
+}
+
+const paddingMap = {
+  sm: '16px',
+  md: '20px',
+  lg: '24px',
 }
 
 /**
- * Card base reutilizável
- * Com header opcional e padding consistente
+ * Card base reutilizável com glassmorphism
+ * Usa tokens CSS para suporte a light/dark mode
  */
-export function Card({ children, header, padding = 'lg', style }: CardProps) {
-  const paddingMap = {
-    sm: tokens.spacing.base,
-    md: tokens.spacing.lg,
-    lg: tokens.spacing.xl,
-  }
+export function Card({ 
+  children, 
+  header, 
+  padding = 'lg', 
+  variant = 'glass',
+  style, 
+  className = '' 
+}: CardProps) {
+  const cardClass = variant === 'glass' ? 'cc-card' : 'cc-card-solid'
 
   return (
     <div
+      className={`${cardClass} ${className}`}
       style={{
-        backgroundColor: tokens.colors.surface,
-        borderRadius: tokens.radius.lg,
-        border: `1px solid ${tokens.colors.surfaceBorder}`,
-        boxShadow: tokens.shadows.md,
         overflow: 'hidden',
         ...style,
       }}
@@ -33,9 +40,9 @@ export function Card({ children, header, padding = 'lg', style }: CardProps) {
       {header && (
         <div
           style={{
-            padding: `${tokens.spacing.base} ${paddingMap[padding]}`,
-            borderBottom: `1px solid ${tokens.colors.surfaceBorder}`,
-            backgroundColor: 'rgba(0, 0, 0, 0.01)',
+            padding: `12px ${paddingMap[padding]}`,
+            borderBottom: '1px solid var(--cc-border)',
+            backgroundColor: 'var(--cc-surface-2)',
           }}
         >
           {header}

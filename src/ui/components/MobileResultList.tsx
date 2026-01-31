@@ -1,4 +1,3 @@
-import { tokens } from '../styles/tokens'
 import { Badge } from './Badge'
 import type { ReconciliationItem } from '../../core/domain/types'
 
@@ -8,6 +7,7 @@ interface MobileResultListProps {
 
 /**
  * Lista de resultados para mobile (cards compactos)
+ * Suporta light/dark mode via CSS variables
  */
 export function MobileResultList({ items }: MobileResultListProps) {
   const formatMoney = (value?: number) => {
@@ -83,89 +83,97 @@ const mobileListCSS = `
   .mobile-result-list {
     display: flex;
     flex-direction: column;
-    gap: ${tokens.spacing.sm};
+    gap: 10px;
   }
 
   .mobile-result-card {
-    padding: ${tokens.spacing.base};
-    background-color: rgba(0, 0, 0, 0.01);
-    border: 1px solid ${tokens.colors.surfaceBorder};
-    border-radius: ${tokens.radius.md};
+    padding: 14px;
+    background: var(--cc-surface);
+    border: 1px solid var(--cc-border);
+    border-radius: var(--cc-radius-md);
+    box-shadow: var(--cc-shadow-sm);
+    backdrop-filter: var(--cc-blur);
+    -webkit-backdrop-filter: var(--cc-blur);
   }
 
   .mobile-result-header {
     display: flex;
     align-items: center;
-    gap: ${tokens.spacing.md};
-    margin-bottom: ${tokens.spacing.sm};
+    gap: 10px;
+    margin-bottom: 10px;
   }
 
   .mobile-result-matricula {
-    font-family: ${tokens.typography.fontFamilyMono};
-    font-size: ${tokens.typography.fontSize.sm};
-    font-weight: ${tokens.typography.fontWeight.medium};
-    color: ${tokens.colors.textPrimary};
+    font-family: var(--cc-font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--cc-text);
   }
 
   .mobile-result-info {
     display: flex;
     flex-direction: column;
-    gap: 2px;
-    margin-bottom: ${tokens.spacing.sm};
-    padding-bottom: ${tokens.spacing.xs};
-    border-bottom: 1px solid ${tokens.colors.surfaceBorder};
+    gap: 3px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--cc-border);
   }
 
   .mobile-result-name {
-    font-size: ${tokens.typography.fontSize.sm};
-    color: ${tokens.colors.textPrimary};
+    font-size: 13px;
+    color: var(--cc-text);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
   .mobile-result-cpf {
-    font-family: ${tokens.typography.fontFamilyMono};
-    font-size: ${tokens.typography.fontSize.xs};
-    color: ${tokens.colors.textSecondary};
+    font-family: var(--cc-font-mono);
+    font-size: 12px;
+    color: var(--cc-text-muted);
   }
 
   .mobile-result-values {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: ${tokens.spacing.md};
-    margin-bottom: ${tokens.spacing.xs};
+    gap: 12px;
+    margin-bottom: 4px;
   }
 
   .mobile-result-value {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
   }
 
   .mobile-result-label {
-    font-size: ${tokens.typography.fontSize.xs};
-    color: ${tokens.colors.textMuted};
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--cc-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
   }
 
   .mobile-result-amount {
-    font-family: ${tokens.typography.fontFamilyMono};
-    font-size: ${tokens.typography.fontSize.sm};
-    font-weight: ${tokens.typography.fontWeight.medium};
-    color: ${tokens.colors.textPrimary};
+    font-family: var(--cc-font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--cc-text);
   }
 
   .mobile-result-obs {
-    font-size: ${tokens.typography.fontSize.xs};
-    color: ${tokens.colors.textMuted};
+    font-size: 12px;
+    color: var(--cc-text-muted);
     margin: 0;
-    padding-top: ${tokens.spacing.xs};
-    border-top: 1px solid ${tokens.colors.surfaceBorder};
+    padding-top: 10px;
+    border-top: 1px solid var(--cc-border);
+    line-height: 1.4;
   }
 
   .mobile-result-empty {
-    padding: ${tokens.spacing.xl};
+    padding: 40px 20px;
     text-align: center;
-    color: ${tokens.colors.textMuted};
+    color: var(--cc-text-muted);
+    font-size: 14px;
   }
 `

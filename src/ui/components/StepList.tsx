@@ -1,5 +1,3 @@
-import { tokens } from '../styles/tokens'
-
 export interface StepItem {
   label: string
   state: 'done' | 'active' | 'pending'
@@ -11,7 +9,7 @@ interface StepListProps {
 
 /**
  * Lista de etapas do processamento
- * Com ícones de estado: done, active, pending
+ * Suporta light/dark mode via CSS variables
  */
 export function StepList({ steps }: StepListProps) {
   return (
@@ -43,7 +41,7 @@ function CheckIcon() {
       height="16"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="#2ea043"
+      stroke="var(--cc-success)"
       strokeWidth="2.5"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -66,14 +64,14 @@ function SpinnerIcon() {
         cx="8"
         cy="8"
         r="6"
-        stroke={tokens.colors.primary}
+        stroke="var(--cc-primary)"
         strokeOpacity="0.25"
         strokeWidth="2"
         fill="none"
       />
       <path
         d="M14 8a6 6 0 00-6-6"
-        stroke={tokens.colors.primary}
+        stroke="var(--cc-primary)"
         strokeWidth="2"
         strokeLinecap="round"
         fill="none"
@@ -85,7 +83,7 @@ function SpinnerIcon() {
 function BulletIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <circle cx="8" cy="8" r="3" fill={tokens.colors.textMuted} opacity="0.5" />
+      <circle cx="8" cy="8" r="3" fill="var(--cc-text-muted)" opacity="0.5" />
     </svg>
   )
 }
@@ -101,14 +99,14 @@ const stepListCSS = `
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: ${tokens.spacing.md};
+    gap: 12px;
   }
 
   .step-item {
     display: flex;
     align-items: center;
-    gap: ${tokens.spacing.md};
-    font-size: ${tokens.typography.fontSize.sm};
+    gap: 12px;
+    font-size: 14px;
     line-height: 1.4;
   }
 
@@ -122,16 +120,16 @@ const stepListCSS = `
   }
 
   .step-done .step-label {
-    color: ${tokens.colors.textSecondary};
+    color: var(--cc-text-secondary);
   }
 
   .step-active .step-label {
-    color: ${tokens.colors.textPrimary};
-    font-weight: ${tokens.typography.fontWeight.medium};
+    color: var(--cc-text);
+    font-weight: 500;
   }
 
   .step-pending .step-label {
-    color: ${tokens.colors.textMuted};
+    color: var(--cc-text-muted);
   }
 
   .step-spinner {

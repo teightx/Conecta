@@ -1,5 +1,3 @@
-import { tokens } from '../styles/tokens'
-
 export interface TabItem {
   id: string
   label: string
@@ -13,21 +11,22 @@ interface TabsProps {
 }
 
 /**
- * Tabs com underline suave e scroll horizontal em mobile
+ * Tabs como Segmented Control (Apple-style)
+ * Suporta light/dark mode via CSS variables
  */
 export function Tabs({ tabs, activeTab, onTabChange }: TabsProps) {
   return (
-    <div className="tabs-container">
-      <div className="tabs-scroll">
+    <div className="segmented-control">
+      <div className="segmented-scroll">
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            className={`tab-item ${activeTab === tab.id ? 'active' : ''}`}
+            className={`segmented-item ${activeTab === tab.id ? 'active' : ''}`}
             onClick={() => onTabChange(tab.id)}
           >
-            <span className="tab-label">{tab.label}</span>
+            <span className="segmented-label">{tab.label}</span>
             {tab.count !== undefined && (
-              <span className="tab-count">{tab.count}</span>
+              <span className="segmented-count">{tab.count}</span>
             )}
           </button>
         ))}
@@ -39,65 +38,93 @@ export function Tabs({ tabs, activeTab, onTabChange }: TabsProps) {
 }
 
 const tabsCSS = `
-  .tabs-container {
-    border-bottom: 1px solid ${tokens.colors.surfaceBorder};
-    margin-bottom: ${tokens.spacing.lg};
+  .segmented-control {
+    margin-bottom: 20px;
   }
 
-  .tabs-scroll {
-    display: flex;
-    gap: ${tokens.spacing.xs};
+  .segmented-scroll {
+    display: inline-flex;
+    gap: 4px;
+    padding: 4px;
+    background: var(--cc-surface-2);
+    border: 1px solid var(--cc-border);
+    border-radius: var(--cc-radius-md);
     overflow-x: auto;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding-bottom: 1px;
+    max-width: 100%;
   }
 
-  .tabs-scroll::-webkit-scrollbar {
+  .segmented-scroll::-webkit-scrollbar {
     display: none;
   }
 
-  .tab-item {
+  .segmented-item {
     display: flex;
     align-items: center;
-    gap: ${tokens.spacing.xs};
-    padding: ${tokens.spacing.md} ${tokens.spacing.base};
-    font-size: ${tokens.typography.fontSize.sm};
-    font-weight: ${tokens.typography.fontWeight.medium};
-    color: ${tokens.colors.textMuted};
-    background: none;
+    gap: 6px;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--cc-text-secondary);
+    background: transparent;
     border: none;
-    border-bottom: 2px solid transparent;
+    border-radius: 8px;
     cursor: pointer;
     white-space: nowrap;
-    transition: all ${tokens.transitions.fast};
-    margin-bottom: -1px;
+    transition: all 150ms ease;
   }
 
-  .tab-item:hover {
-    color: ${tokens.colors.textSecondary};
+  .segmented-item:hover:not(.active) {
+    color: var(--cc-text);
+    background: var(--cc-surface);
   }
 
-  .tab-item.active {
-    color: ${tokens.colors.primary};
-    border-bottom-color: ${tokens.colors.primary};
+  .segmented-item.active {
+    color: var(--cc-text);
+    background: var(--cc-surface-solid);
+    box-shadow: var(--cc-shadow-sm);
   }
 
-  .tab-count {
+  .segmented-label {
+    line-height: 1.2;
+  }
+
+  .segmented-count {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 20px;
+    min-width: 18px;
     height: 18px;
-    padding: 0 6px;
-    font-size: ${tokens.typography.fontSize.xs};
-    font-weight: ${tokens.typography.fontWeight.semibold};
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: ${tokens.radius.full};
+    padding: 0 5px;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--cc-border);
+    border-radius: 9px;
+    line-height: 1;
   }
 
-  .tab-item.active .tab-count {
-    background-color: rgba(0, 102, 204, 0.1);
-    color: ${tokens.colors.primary};
+  .segmented-item.active .segmented-count {
+    background: var(--cc-primary-light);
+    color: var(--cc-primary);
+  }
+
+  /* Mobile: scroll horizontal com fade */
+  @media (max-width: 640px) {
+    .segmented-scroll {
+      display: flex;
+      width: 100%;
+    }
+    
+    .segmented-item {
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+    
+    .segmented-count {
+      font-size: 10px;
+      min-width: 16px;
+      height: 16px;
+    }
   }
 `

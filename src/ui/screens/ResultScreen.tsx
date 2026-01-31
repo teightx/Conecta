@@ -1,5 +1,4 @@
 import { useState, useMemo } from 'react'
-import { tokens } from '../styles/tokens'
 import { Card } from '../components/Card'
 import { Button } from '../components/Button'
 import { Badge } from '../components/Badge'
@@ -9,6 +8,7 @@ import { SearchInput } from '../components/SearchInput'
 import { ResultTable } from '../components/ResultTable'
 import { MobileResultList } from '../components/MobileResultList'
 import { DiagnosticsList } from '../components/DiagnosticsList'
+import { Illustration } from '../components/Illustration'
 import type { ReconciliationResult } from '../../core/domain/types'
 
 // ─────────────────────────────────────────────────────────────
@@ -230,7 +230,7 @@ export function ResultScreen({
 
           {/* Ilustração */}
           <div className="result-illustration">
-            <ResultIllustration />
+            <Illustration name="result" size="md" />
           </div>
         </aside>
       </div>
@@ -243,50 +243,6 @@ export function ResultScreen({
 // ─────────────────────────────────────────────────────────────
 // ILUSTRAÇÃO
 // ─────────────────────────────────────────────────────────────
-
-function ResultIllustration() {
-  return (
-    <svg
-      width="180"
-      height="120"
-      viewBox="0 0 180 120"
-      fill="none"
-      style={{ opacity: 0.7, maxWidth: '100%', height: 'auto' }}
-    >
-      {/* Documento com checkmark */}
-      <rect
-        x="50"
-        y="15"
-        width="80"
-        height="95"
-        rx="6"
-        fill="#e8ecf2"
-        stroke="#c8cfd8"
-        strokeWidth="1"
-      />
-      <rect x="62" y="30" width="56" height="4" rx="2" fill="#b8c0cc" />
-      <rect x="62" y="42" width="48" height="4" rx="2" fill="#b8c0cc" />
-      <rect x="62" y="54" width="52" height="4" rx="2" fill="#b8c0cc" />
-      <rect x="62" y="66" width="40" height="4" rx="2" fill="#b8c0cc" />
-
-      {/* Checkmark grande */}
-      <circle cx="90" cy="90" r="16" fill="rgba(52, 199, 89, 0.15)" />
-      <path
-        d="M82 90 L87 95 L98 84"
-        stroke={tokens.colors.success}
-        strokeWidth="3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        fill="none"
-      />
-
-      {/* Estrelas decorativas */}
-      <circle cx="40" cy="40" r="3" fill={tokens.colors.primary} opacity="0.3" />
-      <circle cx="145" cy="30" r="4" fill={tokens.colors.success} opacity="0.3" />
-      <circle cx="150" cy="80" r="2" fill={tokens.colors.primary} opacity="0.2" />
-    </svg>
-  )
-}
 
 // ─────────────────────────────────────────────────────────────
 // CSS
@@ -301,8 +257,8 @@ const resultCSS = `
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    gap: ${tokens.spacing.lg};
-    margin-bottom: ${tokens.spacing.xl};
+    gap: 24px;
+    margin-bottom: 28px;
     flex-wrap: wrap;
   }
 
@@ -312,42 +268,42 @@ const resultCSS = `
   }
 
   .result-title {
-    font-size: 1.875rem;
-    font-weight: ${tokens.typography.fontWeight.bold};
-    color: ${tokens.colors.textPrimary};
-    letter-spacing: ${tokens.typography.letterSpacing.tight};
-    margin-bottom: ${tokens.spacing.xs};
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--cc-text);
+    letter-spacing: -0.02em;
+    margin-bottom: 6px;
   }
 
   .result-subtitle {
-    font-size: ${tokens.typography.fontSize.md};
-    color: ${tokens.colors.textSecondary};
-    margin-bottom: ${tokens.spacing.md};
+    font-size: 15px;
+    color: var(--cc-text-secondary);
+    margin-bottom: 12px;
   }
 
   .result-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: ${tokens.spacing.sm};
+    gap: 8px;
   }
 
   .result-header-actions {
     display: flex;
-    gap: ${tokens.spacing.sm};
+    gap: 10px;
     flex-shrink: 0;
   }
 
   .result-stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: ${tokens.spacing.base};
-    margin-bottom: ${tokens.spacing.xl};
+    gap: 12px;
+    margin-bottom: 28px;
   }
 
   .result-grid {
     display: grid;
     grid-template-columns: 1fr 280px;
-    gap: ${tokens.spacing.xl};
+    gap: 28px;
     align-items: start;
   }
 
@@ -356,13 +312,14 @@ const resultCSS = `
   }
 
   .result-toolbar {
-    margin-bottom: ${tokens.spacing.lg};
+    margin-bottom: 16px;
   }
 
   .result-content {
-    margin-bottom: ${tokens.spacing.xl};
-    max-height: 500px;
+    margin-bottom: 24px;
+    max-height: 480px;
     overflow-y: auto;
+    border-radius: var(--cc-radius-md);
   }
 
   .result-table-desktop {
@@ -376,49 +333,54 @@ const resultCSS = `
   .result-cta {
     display: flex;
     justify-content: center;
-    padding-top: ${tokens.spacing.lg};
-    border-top: 1px solid ${tokens.colors.surfaceBorder};
+    padding-top: 20px;
+    border-top: 1px solid var(--cc-border);
   }
 
   .result-aside {
     display: flex;
     flex-direction: column;
-    gap: ${tokens.spacing.lg};
+    gap: 16px;
   }
 
   .result-aside-title {
-    font-size: ${tokens.typography.fontSize.sm};
-    font-weight: ${tokens.typography.fontWeight.semibold};
-    color: ${tokens.colors.textPrimary};
-    margin-bottom: ${tokens.spacing.md};
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--cc-text);
+    margin-bottom: 12px;
   }
 
   .result-aside-stat {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    padding: ${tokens.spacing.base};
-    background-color: rgba(0, 102, 204, 0.04);
-    border-radius: ${tokens.radius.md};
-    margin-bottom: ${tokens.spacing.lg};
+    padding: 14px 16px;
+    background: var(--cc-primary-light);
+    border: 1px solid var(--cc-primary);
+    border-color: rgba(37, 99, 235, 0.15);
+    border-radius: var(--cc-radius-md);
+    margin-bottom: 16px;
   }
 
   .result-aside-label {
-    font-size: ${tokens.typography.fontSize.sm};
-    color: ${tokens.colors.textSecondary};
+    font-size: 13px;
+    color: var(--cc-text-secondary);
   }
 
   .result-aside-value {
     font-size: 1.5rem;
-    font-weight: ${tokens.typography.fontWeight.bold};
-    color: ${tokens.colors.primary};
+    font-weight: 700;
+    color: var(--cc-primary);
+    letter-spacing: -0.02em;
   }
 
   .result-aside-subtitle {
-    font-size: ${tokens.typography.fontSize.xs};
-    font-weight: ${tokens.typography.fontWeight.semibold};
-    color: ${tokens.colors.textSecondary};
-    margin-bottom: ${tokens.spacing.sm};
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--cc-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 10px;
   }
 
   .result-aside-list {
@@ -427,28 +389,29 @@ const resultCSS = `
     margin: 0;
     display: flex;
     flex-direction: column;
-    gap: ${tokens.spacing.xs};
-    font-size: ${tokens.typography.fontSize.xs};
-    color: ${tokens.colors.textMuted};
+    gap: 6px;
+    font-size: 12px;
+    color: var(--cc-text-secondary);
     line-height: 1.5;
   }
 
   .result-aside-list li::before {
     content: '•';
     margin-right: 8px;
-    color: ${tokens.colors.error};
+    color: #ef4444;
   }
 
   .result-illustration {
     display: flex;
     justify-content: center;
-    padding: ${tokens.spacing.base};
+    padding: 16px;
   }
 
   /* Tablet */
   @media (max-width: 900px) {
     .result-grid {
       grid-template-columns: 1fr;
+      gap: 24px;
     }
 
     .result-aside {
@@ -464,11 +427,13 @@ const resultCSS = `
   @media (max-width: 640px) {
     .result-header {
       flex-direction: column;
+      gap: 16px;
     }
 
     .result-header-actions {
       width: 100%;
       flex-direction: column;
+      gap: 8px;
     }
 
     .result-header-actions button {
@@ -476,7 +441,15 @@ const resultCSS = `
     }
 
     .result-title {
-      font-size: 1.5rem;
+      font-size: 1.375rem;
+    }
+
+    .result-subtitle {
+      font-size: 14px;
+    }
+
+    .result-stats {
+      gap: 8px;
     }
 
     .result-table-desktop {
@@ -489,6 +462,10 @@ const resultCSS = `
 
     .result-illustration {
       display: none;
+    }
+
+    .result-content {
+      max-height: none;
     }
   }
 `
