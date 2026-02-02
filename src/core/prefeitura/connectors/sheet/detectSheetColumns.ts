@@ -7,6 +7,8 @@ export interface ColumnDetectionResult {
   matriculaCol: number
   valorCol: number
   eventoCol?: number
+  nomeCol?: number
+  cpfCol?: number
   confidence: 'high' | 'medium' | 'low'
 }
 
@@ -36,6 +38,7 @@ export function detectSheetColumns(
   const valorSums: number[] = new Array(maxCols).fill(0)
   const eventoHits: number[] = new Array(maxCols).fill(0)
   const cpfHits: number[] = new Array(maxCols).fill(0)
+  const nomeHits: number[] = new Array(maxCols).fill(0)
 
   for (const row of rows) {
     for (let col = 0; col < row.length; col++) {
@@ -49,6 +52,15 @@ export function detectSheetColumns(
       // Testar CPF (para excluir da busca de valores)
       if (cellLooksCpf(cell)) {
         cpfHits[col]++
+      }
+
+      // Testar Nome (texto com pelo menos 2 palavras, sem números)
+      if (typeof cell === 'string') {
+        const str = cell.trim()
+        // Nome: pelo menos 5 chars, contém espaço, maioria letras
+        if (str.length >= 5 && /^[A-Za-zÀ-ÿ\s]+$/.test(str) && str.includes(' ')) {
+          nomeHits[col]++
+        }
       }
 
       // Testar valor monetário (já exclui CPFs internamente)
@@ -117,6 +129,22 @@ export function detectSheetColumns(
   const eventoCol = indexOfMax(eventoHits)
   const eventoCount = eventoHits[eventoCol]
 
+  // Nome é opcional - excluir colunas já usadas
+  nomeHits[matriculaCol] = -1
+  nomeHits[valorCol] = -1
+  if (eventoCount > 0) nomeHits[eventoCol] = -1
+  const nomeCol = indexOfMax(nomeHits)
+  const nomeCount = nomeHits[nomeCol]
+
+  // CPF é opcional - excluir colunas já usadas
+  const cpfColCandidates = [...cpfHits]
+  cpfColCandidates[matriculaCol] = -1
+  cpfColCandidates[valorCol] = -1
+  if (eventoCount > 0) cpfColCandidates[eventoCol] = -1
+  if (nomeCount > 0) cpfColCandidates[nomeCol] = -1
+  const cpfCol = indexOfMax(cpfColCandidates)
+  const cpfCount = cpfColCandidates[cpfCol]
+
   // Calcular confiança
   const totalRows = rows.length
   const matriculaRatio = matriculaCount / totalRows
@@ -135,6 +163,8 @@ export function detectSheetColumns(
     matriculaCol,
     valorCol,
     eventoCol: eventoCount > 0 ? eventoCol : undefined,
+    nomeCol: nomeCount > rows.length * 0.3 ? nomeCol : undefined,
+    cpfCol: cpfCount > rows.length * 0.3 ? cpfCol : undefined,
     confidence,
   }
 }

@@ -54,6 +54,10 @@ export interface NormalizedRow {
   matricula: string
   /** Valor em reais */
   valor: Money
+  /** Nome do servidor (opcional) */
+  nome?: string
+  /** CPF do servidor (opcional) */
+  cpf?: string
   /** Metadados opcionais */
   meta?: RowMeta
   /** Referência ao dado bruto */

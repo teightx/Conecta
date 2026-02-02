@@ -391,6 +391,11 @@ function UploadZone({
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
   }
 
+  const getFileExtension = (filename: string): string => {
+    const ext = filename.split('.').pop()?.toUpperCase() || ''
+    return ext
+  }
+
   const zoneClass = [
     'zone',
     isDragging && 'zone--dragging',
@@ -425,9 +430,12 @@ function UploadZone({
         {file ? (
           <div className="zone-file">
             <div className="zone-file-info">
-              {icon === 'txt' ? <TxtIcon /> : <SheetIcon />}
+              {icon === 'txt' ? <TxtIconSmall /> : <SheetIconSmall />}
               <div className="zone-file-details">
-                <span className="zone-file-name">{file.name}</span>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <span className="zone-file-name" title={file.name}>{file.name}</span>
+                  <span className="zone-file-type">{getFileExtension(file.name)}</span>
+                </div>
                 <span className="zone-file-size">{formatSize(file.size)}</span>
               </div>
             </div>
@@ -464,7 +472,7 @@ function UploadZone({
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// ÍCONES — Maiores e mais visíveis (stroke-width: 2)
+// ÍCONES — Grandes para dropzone vazia
 // ═══════════════════════════════════════════════════════════════════════════
 
 function TxtIcon() {
@@ -473,8 +481,7 @@ function TxtIcon() {
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
         <polyline points="14 2 14 8 20 8" />
-        <line x1="8" y1="13" x2="16" y2="13" />
-        <line x1="8" y1="17" x2="16" y2="17" />
+        <text x="12" y="16" fontSize="6" fontWeight="bold" textAnchor="middle" fill="currentColor" stroke="none">TXT</text>
       </svg>
     </div>
   )
@@ -486,9 +493,40 @@ function SheetIcon() {
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
         <polyline points="14 2 14 8 20 8" />
+        <rect x="7" y="12" width="10" height="7" rx="1" fill="none" stroke="currentColor" strokeWidth="1" />
+        <line x1="10" y1="12" x2="10" y2="19" strokeWidth="1" />
+        <line x1="7" y1="15.5" x2="17" y2="15.5" strokeWidth="1" />
+      </svg>
+    </div>
+  )
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ÍCONES — Pequenos para arquivo carregado
+// ═══════════════════════════════════════════════════════════════════════════
+
+function TxtIconSmall() {
+  return (
+    <div className="zone-icon-small">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
         <line x1="8" y1="13" x2="16" y2="13" />
-        <line x1="8" y1="17" x2="16" y2="17" />
-        <line x1="10" y1="9" x2="10" y2="21" />
+        <line x1="8" y1="17" x2="12" y2="17" />
+      </svg>
+    </div>
+  )
+}
+
+function SheetIconSmall() {
+  return (
+    <div className="zone-icon-small">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+        <polyline points="14 2 14 8 20 8" />
+        <rect x="7" y="12" width="10" height="7" rx="1" fill="none" stroke="currentColor" strokeWidth="1" />
+        <line x1="10" y1="12" x2="10" y2="19" strokeWidth="1" />
+        <line x1="7" y1="15.5" x2="17" y2="15.5" strokeWidth="1" />
       </svg>
     </div>
   )
@@ -746,6 +784,22 @@ const uploadCSS = `
     color: var(--cc-primary);
   }
 
+  /* Ícone pequeno para arquivo carregado */
+  .zone-icon-small {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--cc-bg-muted, var(--cc-bg));
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .zone-icon-small svg {
+    color: var(--cc-text-tertiary);
+  }
+
   /* Zone Empty State */
   .zone-empty {
     display: flex;
@@ -774,21 +828,21 @@ const uploadCSS = `
     color: var(--cc-primary);
   }
 
-  /* Zone File State */
+  /* Zone File State — Layout fixo que não quebra */
   .zone-file {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto;
     align-items: center;
-    justify-content: space-between;
     gap: 16px;
-    flex-wrap: wrap;
     width: 100%;
   }
 
   .zone-file-info {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
     min-width: 0;
+    overflow: hidden;
   }
 
   .zone-file-details {
@@ -796,40 +850,54 @@ const uploadCSS = `
     flex-direction: column;
     gap: 2px;
     min-width: 0;
+    overflow: hidden;
   }
 
   .zone-file-name {
     font-family: var(--cc-font-body);
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     font-weight: 600;
     color: var(--cc-text);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 280px;
   }
 
   .zone-file-size {
     font-family: var(--cc-font-mono);
-    font-size: 0.75rem;
-    color: #94A3B8;
+    font-size: 0.6875rem;
+    color: var(--cc-text-muted);
+  }
+
+  .zone-file-type {
+    font-family: var(--cc-font-body);
+    font-size: 0.625rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--cc-text-muted);
+    background: var(--cc-bg-muted);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
   }
 
   .zone-file-actions {
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    gap: 10px;
+    flex-shrink: 0;
   }
 
   .zone-status {
     font-family: var(--cc-font-body);
-    font-size: 0.6875rem;
+    font-size: 0.625rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    padding: 6px 12px;
+    padding: 4px 10px;
     border-radius: 6px;
+    white-space: nowrap;
   }
 
   .zone-status--success {

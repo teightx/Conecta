@@ -80,11 +80,13 @@ export async function extractFromXlsx(file: File): Promise<XlsxExtractionResult>
     diagnostics.push({
       severity: 'info',
       code: 'XLSX_COLUMNS_DETECTED',
-      message: `Colunas detectadas: matrícula=${columns.matriculaCol}, valor=${columns.valorCol}`,
+      message: `Colunas: matrícula=${columns.matriculaCol}, valor=${columns.valorCol}${columns.nomeCol !== undefined ? `, nome=${columns.nomeCol}` : ''}${columns.cpfCol !== undefined ? `, cpf=${columns.cpfCol}` : ''}`,
       details: {
         matriculaCol: columns.matriculaCol,
         valorCol: columns.valorCol,
         eventoCol: columns.eventoCol,
+        nomeCol: columns.nomeCol,
+        cpfCol: columns.cpfCol,
         confidence: columns.confidence,
       },
     })
@@ -127,10 +129,30 @@ export async function extractFromXlsx(file: File): Promise<XlsxExtractionResult>
         continue
       }
 
+      // Extrair nome (se coluna detectada)
+      let nome: string | undefined
+      if (columns.nomeCol !== undefined && row[columns.nomeCol] !== null) {
+        const nomeVal = String(row[columns.nomeCol]).trim()
+        if (nomeVal.length >= 3 && /^[A-Za-zÀ-ÿ\s]+$/.test(nomeVal)) {
+          nome = nomeVal
+        }
+      }
+
+      // Extrair CPF (se coluna detectada)
+      let cpf: string | undefined
+      if (columns.cpfCol !== undefined && row[columns.cpfCol] !== null) {
+        const cpfVal = String(row[columns.cpfCol]).replace(/\D/g, '')
+        if (cpfVal.length === 11) {
+          cpf = cpfVal.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+        }
+      }
+
       rows.push({
         source: 'prefeitura',
         matricula,
         valor,
+        nome,
+        cpf,
         meta: {
           competencia,
           evento: eventoAtual,
